@@ -1,5 +1,5 @@
 import streamlit as st
 
-st.title("Hello world")
+st.title("Task 1: Guess the Capital")
 
-st.write("This is my first web app.")
+st.write("ask for guess")

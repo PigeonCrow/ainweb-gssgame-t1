@@ -1,0 +1,4 @@
+#[runner]
+#fastReturns = false
+[server]
+headless = true
