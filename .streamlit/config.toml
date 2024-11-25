@@ -1,0 +1,19 @@
+#[runner]
+#fastReturns = false # apparently deprecated
+
+[client]
+showErrorDetails = false
+showSidebarNavigation = false
+
+# testing
+#toolbarMode = "developer"
+toolbarMode = "viewer"
+
+[theme]
+primaryColor = "#3387f6"
+backgroundColor = "black"
+
+
+
+[server]
+headless = true
