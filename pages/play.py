@@ -57,6 +57,10 @@ def initialize_game_state():
             st.session_state.total_score = st.session_state.get("total_score", 0)
 
 
+def clear_input():
+    st.session_state.guess_input = ""
+
+
 def play_game():
     st.title(":blue[Guess The Capital]")
 
@@ -107,7 +111,10 @@ def play_game():
         st.markdown(
             f"The correct answer was: **{st.session_state.current_capital['capital']}**"
         )
-        if st.button("Next Round"):
+        if st.button("Next Round", on_click=clear_input):
+            # clear guess text_input
+            # st.session_state.guess_input = ""
+
             # Reset game state for next round
             del st.session_state.current_capital
             del st.session_state.hints
