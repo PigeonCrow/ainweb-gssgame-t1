@@ -12,12 +12,12 @@ def show_scores():
 
 
 def display_scores():
-    st.title(":blue[Game Scores]")
+    st.title(":blue[Game Stats]")
 
     scores_df = show_scores()
 
     if scores_df is not None and not scores_df.empty:
-        # Statistics
+        # genaral overall statistics
         col1, col2, col3 = st.columns(3)
         with col1:
             st.metric("Players", scores_df["Name"].nunique())
@@ -26,13 +26,13 @@ def display_scores():
         with col3:
             st.metric("Average Score", f"{scores_df['Score'].mean():.1f}")
 
-        # Top Scores Bar Chart
+        # bar Chart
         fig = px.bar(
             scores_df.nlargest(10, "Score"), x="Name", y="Score", title="Top 10 Scores"
         )
         st.plotly_chart(fig)
 
-        # Scores Table
+        # scores table
         st.markdown("### All Scores")
         st.dataframe(
             scores_df.sort_values("Score", ascending=False),

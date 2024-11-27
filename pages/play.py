@@ -57,7 +57,7 @@ def initialize_game_state():
             st.session_state.total_score = st.session_state.get("total_score", 0)
 
 
-# save scores
+# save scores/stats
 def save_score(name, score):
     scores_file = "resources/scores.csv"
 
@@ -150,7 +150,7 @@ def play_game():
             st.rerun()
 
     # back button
-    if st.button("Back to Main Menu"):
+    if st.button("Back to home "):
         st.switch_page("app.py")
 
 
