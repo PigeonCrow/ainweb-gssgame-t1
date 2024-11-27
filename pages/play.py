@@ -2,9 +2,10 @@ import streamlit as st
 import json
 import random
 import os
+import csv
 
 
-# Load capitals data from JSON file
+# load capitals data from JSON file
 def load_capitals():
     try:
         with open("resources/Capitals.json", "r") as file:
@@ -15,8 +16,7 @@ def load_capitals():
         return None
 
 
-# Select a random capital from the data
-# Flatten the structure to get all countries
+# get random capital from countries
 def get_random_capital(data):
     all_countries = []
     for continent in data["continents"]:
@@ -24,7 +24,7 @@ def get_random_capital(data):
     return random.choice(all_countries)
 
 
-# Generate hints for the selected capital
+# generate hints for the selected capital
 def generate_hints(country_data):
     hints = [
         f"This city is the capital of a country in {get_continent_for_capital(data, country_data['capital'])}",
@@ -35,7 +35,7 @@ def generate_hints(country_data):
     return hints
 
 
-# Find the continent for a given capital
+# find the continent for a given capital
 def get_continent_for_capital(data, capital):
     for continent in data["continents"]:
         for country in continent["countries"]:
@@ -44,7 +44,7 @@ def get_continent_for_capital(data, capital):
     return "Unknown"
 
 
-# Initialize game state.
+# initialize game state.
 def initialize_game_state():
     if "current_capital" not in st.session_state:
         data = load_capitals()
@@ -57,30 +57,47 @@ def initialize_game_state():
             st.session_state.total_score = st.session_state.get("total_score", 0)
 
 
+# save scores
+def save_score(name, score):
+    scores_file = "resources/scores.csv"
+
+    # if file does not exist create header
+    file_exists = os.path.exists(scores_file)
+
+    with open(scores_file, "a", newline="") as file:
+        writer = csv.writer(file)
+        if not file_exists:
+            writer.writerow(["Name", "Score"])
+        # append scores
+        writer.writerow([name, score])
+
+
+# clear last input when replaying
 def clear_input():
     st.session_state.guess_input = ""
 
 
+# main play func
 def play_game():
     st.title(":blue[Guess The Capital]")
 
     initialize_game_state()
 
     # TODO: FIX score vizualisation
-    # Display current score
+    # display current score
     st.sidebar.markdown(f"**Total Score**: {st.session_state.total_score}")
 
-    # Display score in ui with separators
+    # display score in ui with separators
     # col1, col2 = st.columns([3, 1])
     # with col2:
     #    st.markdown("### Score")
     #    st.markdown(f"<h2 style='text-align: center; color: #1f77b4;'>{st.session_state.total_score}</h2>", unsafe_allow_html=True)
 
-    # Display 1st hint
+    # display 1st hint
     st.markdown("### Current Hint:")
     st.info(st.session_state.hints[0])
 
-    # Additional hint button
+    # additional hint button
     if st.session_state.hints_shown == 1 and st.session_state.game_active:
         if st.button("Get Additional Hint"):
             st.session_state.hints_shown = 2
@@ -90,12 +107,12 @@ def play_game():
         st.markdown("### Additional Hint:")
         st.warning(st.session_state.hints[1])
 
-    # Get user guess
+    # get user guess
     user_guess = st.text_input("Enter your guess:", key="guess_input")
 
     if st.button("Submit Guess"):
         if user_guess.lower() == st.session_state.current_capital["capital"].lower():
-            # Calculate points based on hints used
+            # calculate points based on hints used
             points = 2 if st.session_state.hints_shown == 1 else 1
             st.session_state.total_score += points
             st.success(f"Correct! You earned {points} points!")
@@ -111,23 +128,33 @@ def play_game():
         st.markdown(
             f"The correct answer was: **{st.session_state.current_capital['capital']}**"
         )
+
+        # innput name and save score
+        with st.form("save_score_form"):
+            player_name = st.text_input("Enter your name to save your score:")
+            submit_button = st.form_submit_button("Save Score")
+
+        if submit_button and player_name:
+            save_score(player_name, st.session_state.total_score)
+            st.success("Score saved !!")
+
         if st.button("Next Round", on_click=clear_input):
             # clear guess text_input
             # st.session_state.guess_input = ""
 
-            # Reset game state for next round
+            # reset game state for next round
             del st.session_state.current_capital
             del st.session_state.hints
             del st.session_state.hints_shown
             del st.session_state.game_active
             st.rerun()
 
-    # Back button
+    # back button
     if st.button("Back to Main Menu"):
         st.switch_page("app.py")
 
 
-# Verify if the page can be accessed
+# verify if the page can be accessed
 def can_access_play_page():
     if "game_started" not in st.session_state:
         st.error("Unauthorized access. Please start the game from the main page.")
