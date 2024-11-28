@@ -40,37 +40,6 @@ def get_capital():
         return None
 
 
-# get random capital from countries
-# def get_random_capital(data):
-#    all_countries = []
-#    for continent in data["continents"]:
-#        all_countries.extend(continent["countries"])
-#    return random.choice(all_countries)
-
-
-# generate hints for the selected capital
-# def generate_hints(country_data):
-#    hints = [
-#        f"This city is the capital of a country in {get_continent_for_capital(data, country_data['capital'])}",
-#        f"The main language spoken here is {country_data['attributes']['language']}",
-#       f"This is the capital of {country_data['country']}",
-#    ]
-#    random.shuffle(hints)  # Randomize hint order
-#    return hints
-
-
-# find the continent for a given capital
-# def get_continent_for_capital(data, capital):
-#    for continent in data["continents"]:
-#       for country in continent["countries"]:
-#           if country["capital"] == capital:
-#               return continent["name"]
-#   return "Unknown"
-
-
-# initialize game state.
-
-
 # Generate hints for the selected capital by using AI
 # differentiating between difficulty levels of 3 generated hints
 def generate_hints(new_capital):
@@ -167,40 +136,6 @@ def play_game():
     #    st.markdown(f"<h2 style='text-align: center; color: #1f77b4;'>{st.session_state.total_score}</h2>", unsafe_allow_html=True)
 
     if st.session_state.game_active:
-        #     # display 1st hint
-        #     st.markdown("### Current Hint:")
-        #     st.info(st.session_state.hints[0])
-
-        # additional hint button
-        #     if st.session_state.hints_shown == 1 and st.session_state.game_active:
-        #         if st.button("Get Additional Hint"):
-        #             st.session_state.hints_shown = 2
-        #             st.markdown("### Additional Hint:")
-        #             st.warning(st.session_state.hints[1])
-        #     elif st.session_state.hints_shown == 2 and st.session_state.game_active:
-        #         st.markdown("### Additional Hint:")
-        #         st.warning(st.session_state.hints[1])
-
-        # get user guess
-        #     user_guess = st.text_input("Enter your guess:", key="guess_input")
-
-        #     if st.button("Submit Guess"):
-        #         if (
-        #            user_guess.lower()
-        #             == st.session_state.current_capital["capital"].lower()
-        #         ):
-        # calculate points based on hints used
-        #             points = 2 if st.session_state.hints_shown == 1 else 1
-        #             st.session_state.total_score += points
-        #             st.success(f"Correct! You earned {points} points!")
-        #             st.session_state.game_active = False
-        #         else:
-        #             if st.session_state.hints_shown == 2:
-        #                 st.error("Sorry, that's incorrect. No points awarded.")
-        #                 st.session_state.game_active = False
-        #             else:
-        #                 st.error("Sorry, that's incorrect. Try getting another hint!")
-
         # Display 1st hint
         st.markdown("### Current Hint:")
         st.info(st.session_state.hints[0])
