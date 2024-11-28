@@ -1,0 +1,119 @@
+{
+  "continents": [
+    {
+      "name": "Africa",
+      "countries": [
+        {
+          "capital": "Cairo",
+          "country": "Egypt",
+          "attributes": {
+            "language": "Arabic"
+          }
+        },
+        {
+          "capital": "Nairobi",
+          "country": "Kenya",
+          "attributes": {
+            "language": "Swahili"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Asia",
+      "countries": [
+        {
+          "capital": "Tokyo",
+          "country": "Japan",
+          "attributes": {
+            "language": "Japanese"
+          }
+        },
+        {
+          "capital": "New Delhi",
+          "country": "India",
+          "attributes": {
+            "language": "Hindi"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Europe",
+      "countries": [
+        {
+          "capital": "Paris",
+          "country": "France",
+          "attributes": {
+            "language": "French"
+          }
+        },
+        {
+          "capital": "Berlin",
+          "country": "Germany",
+          "attributes": {
+            "language": "German"
+          }
+        }
+      ]
+    },
+    {
+      "name": "North America",
+      "countries": [
+        {
+          "capital": "Washington, D.C.",
+          "country": "United States",
+          "attributes": {
+            "language": "English"
+          }
+        },
+        {
+          "capital": "Ottawa",
+          "country": "Canada",
+          "attributes": {
+            "language": "English and French"
+          }
+        }
+      ]
+    },
+    {
+      "name": "South America",
+      "countries": [
+        {
+          "capital": "Brasília",
+          "country": "Brazil",
+          "attributes": {
+            "language": "Portuguese"
+          }
+        },
+        {
+          "capital": "Buenos Aires",
+          "country": "Argentina",
+          "attributes": {
+            "language": "Spanish"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Australia",
+      "countries": [
+        {
+          "capital": "Canberra",
+          "country": "Australia",
+          "attributes": {
+            "language": "English"
+          }
+        },
+        {
+          "capital": "Wellington",
+          "country": "New Zealand",
+          "attributes": {
+            "language": "English and Māori"
+          }
+        }
+      ]
+    }
+  ]
+}
+
