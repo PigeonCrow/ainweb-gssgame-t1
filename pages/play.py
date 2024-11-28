@@ -93,36 +93,40 @@ def play_game():
     #    st.markdown("### Score")
     #    st.markdown(f"<h2 style='text-align: center; color: #1f77b4;'>{st.session_state.total_score}</h2>", unsafe_allow_html=True)
 
-    # display 1st hint
-    st.markdown("### Current Hint:")
-    st.info(st.session_state.hints[0])
+    if st.session_state.game_active:
+        # display 1st hint
+        st.markdown("### Current Hint:")
+        st.info(st.session_state.hints[0])
 
-    # additional hint button
-    if st.session_state.hints_shown == 1 and st.session_state.game_active:
-        if st.button("Get Additional Hint"):
-            st.session_state.hints_shown = 2
+        # additional hint button
+        if st.session_state.hints_shown == 1 and st.session_state.game_active:
+            if st.button("Get Additional Hint"):
+                st.session_state.hints_shown = 2
+                st.markdown("### Additional Hint:")
+                st.warning(st.session_state.hints[1])
+        elif st.session_state.hints_shown == 2 and st.session_state.game_active:
             st.markdown("### Additional Hint:")
             st.warning(st.session_state.hints[1])
-    elif st.session_state.hints_shown == 2 and st.session_state.game_active:
-        st.markdown("### Additional Hint:")
-        st.warning(st.session_state.hints[1])
 
-    # get user guess
-    user_guess = st.text_input("Enter your guess:", key="guess_input")
+        # get user guess
+        user_guess = st.text_input("Enter your guess:", key="guess_input")
 
-    if st.button("Submit Guess"):
-        if user_guess.lower() == st.session_state.current_capital["capital"].lower():
-            # calculate points based on hints used
-            points = 2 if st.session_state.hints_shown == 1 else 1
-            st.session_state.total_score += points
-            st.success(f"Correct! You earned {points} points!")
-            st.session_state.game_active = False
-        else:
-            if st.session_state.hints_shown == 2:
-                st.error("Sorry, that's incorrect. No points awarded.")
+        if st.button("Submit Guess"):
+            if (
+                user_guess.lower()
+                == st.session_state.current_capital["capital"].lower()
+            ):
+                # calculate points based on hints used
+                points = 2 if st.session_state.hints_shown == 1 else 1
+                st.session_state.total_score += points
+                st.success(f"Correct! You earned {points} points!")
                 st.session_state.game_active = False
             else:
-                st.error("Sorry, that's incorrect. Try getting another hint!")
+                if st.session_state.hints_shown == 2:
+                    st.error("Sorry, that's incorrect. No points awarded.")
+                    st.session_state.game_active = False
+                else:
+                    st.error("Sorry, that's incorrect. Try getting another hint!")
 
     if not st.session_state.game_active:
         st.markdown(
