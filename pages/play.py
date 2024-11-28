@@ -1,7 +1,4 @@
 import streamlit as st
-
-# import json
-# import random
 import os
 import csv
 from openai import OpenAI
@@ -98,16 +95,34 @@ def initialize_game_state():
 # save scores/stats
 def save_score(name, score):
     scores_file = "resources/scores.csv"
+    updated_scores = []
+    name_exists = False
 
     # if file does not exist create header
-    file_exists = os.path.exists(scores_file)
+    # find duplicate names and add the scores
+    if os.path.exists(scores_file):
+        with open(scores_file, "r") as file:
+            reader = csv.reader(file)
+            headers = next(reader)  # Skip header
+            for row in reader:
+                if row[0] == name:
+                    updated_scores.append([name, int(row[1]) + score])
+                    name_exists = True
+                else:
+                    updated_scores.append(row)
 
-    with open(scores_file, "a", newline="") as file:
-        writer = csv.writer(file)
-        if not file_exists:
+        with open(scores_file, "w", newline="") as file:
+            writer = csv.writer(file)
             writer.writerow(["Name", "Score"])
-        # append scores
-        writer.writerow([name, score])
+            writer.writerows(updated_scores)
+            if not name_exists:
+                writer.writerow([name, score])
+    else:
+        # Create new file if doesn't exist
+        with open(scores_file, "w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(["Name", "Score"])
+            writer.writerow([name, score])
 
 
 # clear last input when replaying
