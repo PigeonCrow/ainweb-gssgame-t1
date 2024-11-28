@@ -35,6 +35,8 @@ if "game_started" not in st.session_state:
 
 
 left, middle, right = st.columns(3)
-if middle.button("Play", icon="🌎", type="primary", use_container_width=True):
+if left.button("Play", icon="🌎", type="primary", use_container_width=True):
     st.session_state["game_started"] = True
     st.switch_page("pages/play.py")
+if right.button("Game Stats", icon="📊", type="primary", use_container_width=True):
+    st.switch_page("pages/stats.py")
