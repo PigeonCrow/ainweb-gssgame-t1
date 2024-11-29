@@ -10,8 +10,8 @@ showSidebarNavigation = false
 toolbarMode = "viewer"
 
 [theme]
-primaryColor = "#3387f6"
-backgroundColor = "black"
+#primaryColor = "#3387f6"
+#backgroundColor = "black"
 
 
 
