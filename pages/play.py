@@ -2,7 +2,7 @@ import streamlit as st
 import os
 import csv
 from openai import OpenAI
-
+import random
 
 # integrate AI
 client = OpenAI(api_key=st.secrets["openai"]["api_key"])
@@ -12,23 +12,222 @@ new_capital = ""
 
 # Load capitals by using AI
 def get_capital():
-    try:
-        capital_prompt = "Name a random capital. Answer with a single word."
-        chat_completion = client.chat.completions.create(
-            model=model,
-            messages=[
-                {"role": "user", "content": capital_prompt},
-            ],
-        )
-        # Extract the response content
-        new_capital = chat_completion.choices[0].message.content.strip()
-        # Ensure that it is a valid string
-        if not new_capital or " " in new_capital:
-            raise ValueError("Invalid capital received.")
-        return new_capital
-    except Exception as e:
-        st.error(f"Error loading capitals data: {e}")
-        return None
+    # define static list of capitals
+    capital_list = [
+        "Kabul",
+        "Tirana",
+        "Algiers",
+        "Andorra la Vella",
+        "Luanda",
+        "Saint John's",
+        "Buenos Aires",
+        "Yerevan",
+        "Canberra",
+        "Vienna",
+        "Baku",
+        "Nassau",
+        "Manama",
+        "Dhaka",
+        "Bridgetown",
+        "Minsk",
+        "Brussels",
+        "Belmopan",
+        "Porto-Novo",
+        "Thimphu",
+        "La Paz",
+        "Sarajevo",
+        "Gaborone",
+        "Brasília",
+        "Bandar Seri Begawan",
+        "Sofia",
+        "Ouagadougou",
+        "Gitega",
+        "Phnom Penh",
+        "Yaoundé",
+        "Ottawa",
+        "Praia",
+        "Bangui",
+        "N'Djamena",
+        "Santiago",
+        "Beijing",
+        "Bogotá",
+        "Moroni",
+        "Brazzaville",
+        "Kinshasa",
+        "San José",
+        "Zagreb",
+        "Havana",
+        "Nicosia",
+        "Prague",
+        "Copenhagen",
+        "Djibouti",
+        "Roseau",
+        "Santo Domingo",
+        "Quito",
+        "Cairo",
+        "San Salvador",
+        "Malabo",
+        "Asmara",
+        "Tallinn",
+        "Mbabane",
+        "Addis Ababa",
+        "Suva",
+        "Helsinki",
+        "Paris",
+        "Libreville",
+        "Banjul",
+        "Tbilisi",
+        "Berlin",
+        "Accra",
+        "Athens",
+        "Saint George's",
+        "Guatemala City",
+        "Conakry",
+        "Bissau",
+        "Georgetown",
+        "Port-au-Prince",
+        "Tegucigalpa",
+        "Budapest",
+        "Reykjavik",
+        "New Delhi",
+        "Jakarta",
+        "Tehran",
+        "Baghdad",
+        "Dublin",
+        "Jerusalem",
+        "Rome",
+        "Kingston",
+        "Tokyo",
+        "Amman",
+        "Nur-Sultan",
+        "Nairobi",
+        "Tarawa",
+        "Pyongyang",
+        "Seoul",
+        "Pristina",
+        "Kuwait City",
+        "Bishkek",
+        "Vientiane",
+        "Riga",
+        "Beirut",
+        "Maseru",
+        "Monrovia",
+        "Tripoli",
+        "Vaduz",
+        "Vilnius",
+        "Luxembourg",
+        "Antananarivo",
+        "Lilongwe",
+        "Kuala Lumpur",
+        "Malé",
+        "Bamako",
+        "Valletta",
+        "Majuro",
+        "Nouakchott",
+        "Port Louis",
+        "Mexico City",
+        "Palikir",
+        "Chisinau",
+        "Monaco",
+        "Ulaanbaatar",
+        "Podgorica",
+        "Rabat",
+        "Maputo",
+        "Naypyidaw",
+        "Windhoek",
+        "Yaren",
+        "Kathmandu",
+        "Amsterdam",
+        "Wellington",
+        "Managua",
+        "Niamey",
+        "Abuja",
+        "Skopje",
+        "Oslo",
+        "Muscat",
+        "Islamabad",
+        "Ngerulmud",
+        "Panama City",
+        "Port Moresby",
+        "Asunción",
+        "Lima",
+        "Manila",
+        "Warsaw",
+        "Lisbon",
+        "Doha",
+        "Bucharest",
+        "Moscow",
+        "Kigali",
+        "Basseterre",
+        "Castries",
+        "Kingstown",
+        "Apia",
+        "San Marino",
+        "Riyadh",
+        "Dakar",
+        "Belgrade",
+        "Victoria",
+        "Freetown",
+        "Singapore",
+        "Bratislava",
+        "Ljubljana",
+        "Honiara",
+        "Mogadishu",
+        "Pretoria",
+        "Juba",
+        "Madrid",
+        "Colombo",
+        "Khartoum",
+        "Paramaribo",
+        "Stockholm",
+        "Bern",
+        "Damascus",
+        "São Tomé",
+        "Dushanbe",
+        "Dodoma",
+        "Bangkok",
+        "Lomé",
+        "Nuku'alofa",
+        "Port of Spain",
+        "Tunis",
+        "Ankara",
+        "Ashgabat",
+        "Funafuti",
+        "Kampala",
+        "Kyiv",
+        "Abu Dhabi",
+        "London",
+        "Washington, D.C.",
+        "Montevideo",
+        "Tashkent",
+        "Port Vila",
+        "Vatican City",
+        "Caracas",
+        "Hanoi",
+        "Lusaka",
+        "Harare",
+    ]
+
+    new_capital = random.choice(capital_list)
+    return new_capital
+
+    # try:
+    #     capital_prompt = "Name a random capital. Answer with a single word."
+    #     chat_completion = client.chat.completions.create(
+    #         model=model,
+    #         messages=[
+    #             {"role": "user", "content": capital_prompt},
+    #         ],
+    #     )
+    #     # Extract the response content
+    #     new_capital = chat_completion.choices[0].message.content.strip()
+    #     # Ensure that it is a valid string
+    #     if not new_capital or " " in new_capital:
+    #         raise ValueError("Invalid capital received.")
+    #     return new_capital
+    # except Exception as e:
+    #     st.error(f"Error loading capitals data: {e}")
+    #     return None
 
 
 # Generate hints for the selected capital by using AI
@@ -49,7 +248,7 @@ def generate_hints(new_capital):
     hint2_prompt = (
         "We are playing a guessing game. The capital "
         + new_capital
-        + " needs to be guessed. We want to give hints from difficulty levels 1(very hard), 2 (still tricky) and 3(easy). Give a short one sentence hint of the difficulty 2"
+        + " needs to be guessed. We want to give hints from difficulty levels 1(very hard), 2 (still tricky) and 3(easy). Give a short one sentence hint of the difficulty 2 "
     )
     chat_completion = client.chat.completions.create(
         model=model,
@@ -61,7 +260,7 @@ def generate_hints(new_capital):
     hint3_prompt = (
         "We are playing a guessing game. The capital "
         + new_capital
-        + " needs to be guessed. We want to give hints from difficulty levels 1(very hard), 2 (still tricky) and 3(easy). Give a short one sentence hint of the difficulty 3"
+        + " needs to be guessed. We want to give hints from difficulty levels 1(very hard), 2 (still tricky) and 3(easy). Give a short one sentence hint of the difficulty 3 and never mention the actual City while providing this hint"
     )
     chat_completion = client.chat.completions.create(
         model=model,
@@ -182,7 +381,7 @@ def play_game():
         if st.button("Submit Guess"):
             if (
                 user_guess.lower()
-                in st.session_state.current_capital["capital"].lower()
+                == st.session_state.current_capital["capital"].lower()
             ):
                 # User had correct guess
                 # Calculate points based on hints used
