@@ -1,2 +1,5 @@
 # ignore directories 
 backup/
+
+# secret
+.streamlit/secrets.toml

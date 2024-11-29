@@ -5,15 +5,9 @@ from openai import OpenAI
 
 
 # integrate AI
-client = OpenAI(
-    api_key="sk-svcacct-p5tbqGD9kG5T8cOTLFf6i-LusTXw9X4OBDRQnd4u02D9tBHoL364BkZS890Ne6ZT3BlbkFJdTeNdVE1t3jqwQ-kKZ4NQ66-F_8I8hcmZ-HJHWYeNCJtRDr7-pz1AvdTQlJziAA"
-)
+client = OpenAI(api_key=st.secrets["openai"]["api_key"])
 model = "gpt-4o-mini"
 new_capital = ""
-
-
-# load capitals data from JSON file
-# def load_capitals():
 
 
 # Load capitals by using AI
@@ -90,6 +84,10 @@ def initialize_game_state():
             st.session_state.hints_shown = 1
             st.session_state.game_active = True
             st.session_state.total_score = st.session_state.get("total_score", 0)
+            st.session_state.score_saved = False
+            st.session_state.player_name = ""
+            st.session_state.show_save_dialog = False
+            # st.session_state.input_disabled = False
 
 
 # save scores/stats
@@ -103,7 +101,7 @@ def save_score(name, score):
     if os.path.exists(scores_file):
         with open(scores_file, "r") as file:
             reader = csv.reader(file)
-            headers = next(reader)  # Skip header
+            headers = next(reader)  # skip header
             for row in reader:
                 if row[0] == name:
                     updated_scores.append([name, int(row[1]) + score])
@@ -126,12 +124,26 @@ def save_score(name, score):
 
 
 # clear last input when replaying
-def clear_input():
-    st.session_state.guess_input = ""
+# def clear_input():
+# st.session_state.guess_input = ""
+#   else:
+#       st.error("Failed to start the game. No valid capital.")
+#       st.session_state.game_active = Falsedef
 
-    #   else:
-    #       st.error("Failed to start the game. No valid capital.")
-    #       st.session_state.game_active = False
+
+def clear_round_state():
+    if "current_capital" in st.session_state:
+        del st.session_state.current_capital
+    if "hints" in st.session_state:
+        del st.session_state.hints
+    if "hints_shown" in st.session_state:
+        del st.session_state.hints_shown
+    if "game_active" in st.session_state:
+        del st.session_state.game_active
+    if "guess_input" in st.session_state:
+        st.session_state.guess_input = ""
+    st.session_state.show_save_dialog = False
+    st.session_state.score_saved = False
 
 
 # main play func
@@ -140,15 +152,8 @@ def play_game():
 
     initialize_game_state()
 
-    # TODO: FIX score vizualisation
     # display current score
     st.sidebar.markdown(f"**Total Score**: {st.session_state.total_score}")
-
-    # display score in ui with separators
-    # col1, col2 = st.columns([3, 1])
-    # with col2:
-    #    st.markdown("### Score")
-    #    st.markdown(f"<h2 style='text-align: center; color: #1f77b4;'>{st.session_state.total_score}</h2>", unsafe_allow_html=True)
 
     if st.session_state.game_active:
         # Display 1st hint
@@ -200,28 +205,34 @@ def play_game():
                     st.error("Sorry, that's incorrect. No points awarded!")
                     st.session_state.game_active = False
 
+    ## Game Over state
     if not st.session_state.game_active:
         st.markdown(
             f"The correct answer was: **{st.session_state.current_capital['capital']}**"
         )
 
-        # innput name and save score
-        with st.form("save_score_form"):
-            player_name = st.text_input("Enter your name to save your score:")
-            submit_button = st.form_submit_button("Save Score")
+        # Add Save Score button that shows dialog
+        if not st.session_state.score_saved:
+            if st.button("Save Score"):
+                st.session_state.show_save_dialog = True
 
-        if submit_button and player_name:
-            save_score(player_name, st.session_state.total_score)
-            st.success("Score saved !!")
+        # Show save score dialog
+        if st.session_state.show_save_dialog and not st.session_state.score_saved:
+            with st.form(key="save_score_dialog"):
+                st.subheader("Save Your Score")
+                st.markdown(f"Current Score: {st.session_state.total_score}")
+                player_name = st.text_input("Enter your name:")
+                save_button = st.form_submit_button("Save")
 
-        if st.button("Next Round", on_click=clear_input):
-            # clear guess text_input
-            # st.session_state.guess_input = ""
-            # reset game state for next round
-            del st.session_state.current_capital
-            del st.session_state.hints
-            del st.session_state.hints_shown
-            del st.session_state.game_active
+                if save_button and player_name:
+                    save_score(player_name.strip(), st.session_state.total_score)
+                    st.session_state.score_saved = True
+                    st.session_state.show_save_dialog = False
+                    st.session_state.total_score = 0
+                    st.success(f"Score saved for player: {player_name}")
+
+        if st.button("Next Round"):
+            clear_round_state()
             st.rerun()
 
     # back button
