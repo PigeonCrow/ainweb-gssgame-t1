@@ -5,15 +5,9 @@ from openai import OpenAI
 
 
 # integrate AI
-client = OpenAI(
-    api_key="sk-svcacct-p5tbqGD9kG5T8cOTLFf6i-LusTXw9X4OBDRQnd4u02D9tBHoL364BkZS890Ne6ZT3BlbkFJdTeNdVE1t3jqwQ-kKZ4NQ66-F_8I8hcmZ-HJHWYeNCJtRDr7-pz1AvdTQlJziAA"
-)
+client = OpenAI(api_key=st.secrets["openai"]["api_key"])
 model = "gpt-4o-mini"
 new_capital = ""
-
-
-# load capitals data from JSON file
-# def load_capitals():
 
 
 # Load capitals by using AI
@@ -107,7 +101,7 @@ def save_score(name, score):
     if os.path.exists(scores_file):
         with open(scores_file, "r") as file:
             reader = csv.reader(file)
-            headers = next(reader)  # Skip header
+            headers = next(reader)  # skip header
             for row in reader:
                 if row[0] == name:
                     updated_scores.append([name, int(row[1]) + score])
@@ -147,7 +141,7 @@ def clear_round_state():
     if "game_active" in st.session_state:
         del st.session_state.game_active
     if "guess_input" in st.session_state:
-        del st.session_state.guess_input
+        st.session_state.guess_input = ""
     st.session_state.show_save_dialog = False
     st.session_state.score_saved = False
 
