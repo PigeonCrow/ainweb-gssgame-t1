@@ -170,6 +170,8 @@ def play_game():
         elif st.session_state.hints_shown == 2 and st.session_state.game_active:
             # Show third hint
             if st.button("Get Additional Hint"):
+                st.markdown("### Additional Hint:")
+                st.warning(st.session_state.hints[1])
                 st.markdown("### Third Hint:")
                 st.error(st.session_state.hints[2])
                 st.session_state.hints_shown = 3
@@ -180,8 +182,9 @@ def play_game():
         if st.button("Submit Guess"):
             if (
                 user_guess.lower()
-                == st.session_state.current_capital["capital"].lower()
-            ):  # User had correct guess
+                in st.session_state.current_capital["capital"].lower()
+            ):
+                # User had correct guess
                 # Calculate points based on hints used
                 if st.session_state.hints_shown == 1:
                     points = 3
@@ -210,7 +213,6 @@ def play_game():
         st.markdown(
             f"The correct answer was: **{st.session_state.current_capital['capital']}**"
         )
-
         # Add Save Score button that shows dialog
         if not st.session_state.score_saved:
             if st.button("Save Score"):
